@@ -70,13 +70,14 @@ public class HookEntrance implements IXposedHookLoadPackage {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
                 Context context = (Context) param.args[0];
+                appContext[0] = context;
                 try {
                     hookMenuItemEnabled(context);
                 } catch (Exception e) {
                     Log.e(TAG, "hook menu item failed.", e);
                     // 错误提示
                     new Handler(Looper.getMainLooper()).post(() -> {
-                        Toast.makeText(appContext[0], 
+                        Toast.makeText(context, 
                             "模块初始化失败: " + e.getMessage(), 
                             Toast.LENGTH_LONG).show();
                     });
