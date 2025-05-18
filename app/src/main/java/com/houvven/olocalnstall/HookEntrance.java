@@ -49,6 +49,12 @@ public class HookEntrance implements IXposedHookLoadPackage {
                 if (itemId == targetId) {
                     Log.d(TAG, "hook menu item: " + instance.getTitle());
                     param.args[0] = true;
+                    // 在主线程显示Toast
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        Toast.makeText(appContext[0], 
+                            "已启用本地升级选项", 
+                            Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
         });
@@ -62,6 +68,12 @@ public class HookEntrance implements IXposedHookLoadPackage {
                     hookMenuItemEnabled(context);
                 } catch (Exception e) {
                     Log.e(TAG, "hook menu item failed.", e);
+                    // 错误提示
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        Toast.makeText(appContext[0], 
+                            "模块初始化失败: " + e.getMessage(), 
+                            Toast.LENGTH_LONG).show();
+                    });
                 }
             }
         });
