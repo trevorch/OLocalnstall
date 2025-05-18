@@ -11,6 +11,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
+
 import org.luckypray.dexkit.DexKitBridge;
 import org.luckypray.dexkit.query.FindMethod;
 import org.luckypray.dexkit.query.matchers.MethodMatcher;
@@ -37,7 +41,9 @@ public class HookEntrance implements IXposedHookLoadPackage {
         if (!lpparam.isFirstApplication) {
             return;
         }
-
+        // 保存全局Context
+        final Context[] appContext = new Context[1];
+        
         Class<?> R_ID_Class = lpparam.classLoader.loadClass("com.oplus.ota.R$id");
         XposedHelpers.findAndHookMethod("androidx.appcompat.view.menu.MenuItemImpl", lpparam.classLoader, "setEnabled", boolean.class, new XC_MethodHook() {
             @Override
